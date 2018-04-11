@@ -7,6 +7,22 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    /**
+     * Get the personal data record associated with the user.
+     */
+    public function personalData()
+    {
+        return $this->hasOne('App\PersonalData');
+    }
+
+    /**
+     * Get the advertisement record associated with the user.
+     */
+    public function advertisement()
+    {
+        return $this->hasMany('App\Advertisement');
+    }
+
     use Notifiable;
 
     /**
