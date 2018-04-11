@@ -11,6 +11,6 @@ class Property extends Model
      */
     public function advertisement()
     {
-        return $this->belongsTo('App\Advertisement');
+        return $this->hasOne('App\Advertisement');
     }
 }
