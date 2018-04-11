@@ -34,12 +34,7 @@ class CreatePropertiesTable extends Migration
             $table->string("street");
             $table->string("street_number");
             $table->string("postal_code");
-            $table->unsignedInteger("advertisement_id");
             $table->timestamps();
-
-            $table->foreign("advertisement_id")
-                ->references("advertisement_id")
-                ->on("advertisements");
         });
     }
 

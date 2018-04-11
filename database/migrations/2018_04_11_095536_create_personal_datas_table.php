@@ -23,13 +23,7 @@ class CreatePersonalDatasTable extends Migration
             $table->string("street");
             $table->string("street_number");
             $table->string("postal_code");
-            $table->unsignedInteger("user_id");
             $table->timestamps();
-
-
-            $table->foreign("user_id")
-                ->references("user_id")
-                ->on("users");
         });
     }
 

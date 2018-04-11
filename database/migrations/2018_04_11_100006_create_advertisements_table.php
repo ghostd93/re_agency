@@ -20,18 +20,7 @@ class CreateAdvertisementsTable extends Migration
             $table->date("date_of_announcement");
             $table->string("description");
             $table->integer("price");
-            $table->unsignedInteger("user_id");
-            $table->unsignedInteger("property_id");
             $table->timestamps();
-
-
-            $table->foreign("user_id")
-                ->references("user_id")
-                ->on("users");
-
-            $table->foreign("property_id")
-                ->references("property_id")
-                ->on("properties");
         });
     }
 
