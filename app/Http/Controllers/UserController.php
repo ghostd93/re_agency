@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -14,7 +15,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        //return User::all();
+        return response()->json([
+            'data' => User::all()
+        ], 200);
     }
 
     /**
@@ -35,9 +39,26 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 409);
+        }
+        $user = new User($request->all());
+        $user->fill([
+            'password' => bcrypt($request->get('password'))
+        ]);
+        $user->save();
+        return response()->json([
+           'message' => 'User successfully created'
+        ], 200);
     }
-
     /**
      * Display the specified resource.
      *
@@ -46,7 +67,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json([
+            'data' => User::where('id', $id)->get()
+        ], 200);
     }
 
     /**
