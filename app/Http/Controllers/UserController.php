@@ -52,7 +52,7 @@ class UserController extends Controller
         }
         $user = new User($data);
         $user->fill([
-            'password' => $data['password']
+            'password' => bcrypt($data['password'])
         ]);
         $user->save();
         return response()->json([
