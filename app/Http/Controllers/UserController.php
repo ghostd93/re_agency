@@ -50,9 +50,9 @@ class UserController extends Controller
                 'message' => $validator->errors()
             ], 409);
         }
-        $user = new User($request->all());
+        $user = new User($data);
         $user->fill([
-            'password' => bcrypt($request->get('password'))
+            'password' => $data['password']
         ]);
         $user->save();
         return response()->json([
