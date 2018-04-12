@@ -41,8 +41,8 @@ class UserController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'name' => 'required',
-            'email' => 'required',
+            'name' => 'required|unique:users',
+            'email' => 'required|unique:users',
             'password' => 'required'
         ]);
         if($validator->fails()){
@@ -87,12 +87,12 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -103,6 +103,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(User::findOrFail($id)){
+            User::destroy($id);
+            return response()->json([
+                'message' => 'User successfully deleted'
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'User deletion failed'
+        ],409);
+
     }
 }
