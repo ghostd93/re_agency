@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Advertisement;
+use App\Property;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -32,9 +34,37 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($advertisement_id, Request $request)
     {
-        //
+        $advertisement = Advertisement::find($advertisement_id);
+        $property = new Property([
+            "property_type" => $request->get('property_type'),
+            "description" => $request->get('description'),
+            "date_of_registration" => $request->get('date_of_registration'),
+            "property_area" => $request->get('property_area'),
+            "date_of_construction" => $request->get('date_of_construction'),
+            "estete_status" => $request->get('estete_status'),
+            "number_of_floors" => $request->get('number_of_floors'),
+            "number_of_rooms" => $request->get('number_of_rooms'),
+            "floor" => $request->get('floor'),
+            "balcony" => $request->get('balcony'),
+            "garage" => $request->get('garage'),
+            "destiny" => $request->get('destiny'),
+            "land_area" => $request->get('land_area'),
+            "management" => $request->get('management'),
+            "country" => $request->get('country'),
+            "city" => $request->get('city'),
+            "street" => $request->get('street'),
+            "street_number" => $request->get('street_number'),
+            "postal_code" => $request->get('postal_code')]);
+
+            $property->Advertisement()->save($advertisement);
+            $property->advertisement_id = $advertisement->id;
+            $property->save();
+
+        return response()->json([
+            'message' => 'Advertisement has been successfully attached to the property'
+        ], 201);
     }
 
     /**

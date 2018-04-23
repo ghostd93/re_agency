@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Advertisement;
 use Illuminate\Http\Request;
 
 class AdvertisementController extends Controller
@@ -13,7 +14,10 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        //
+        //return Advertisement::all();
+        return response()->json([
+            'data' => Advertisement::all()
+        ], 200);
     }
 
     /**
@@ -34,7 +38,20 @@ class AdvertisementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $advertisement = new Advertisement([
+            'status' => $data['status'],
+            'type' => $data['type'],
+            'name' => $data['name'],
+            'date_of_announcement' => $data['date_of_announcement'],
+            'description' => $data['description'],
+            'price' => $data['price'],
+            'user_id' => $data['user_id']]);
+        $advertisement->save();
+
+        return response()->json([
+            'message' => 'Advertisement successfully created'
+        ], 201);
     }
 
     /**
@@ -45,7 +62,9 @@ class AdvertisementController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json([
+            'data' => Advertisement::where('id', $id)->get()
+        ], 200);
     }
 
     /**
@@ -79,6 +98,14 @@ class AdvertisementController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Advertisement::findOrFail($id)){
+            Advertisement::destroy($id);
+            return response()->json([
+                'message' => 'Advertisement successfully deleted'
+            ], 200);
+        }
+        return response()->json([
+            'message' => 'Advertisement deletion failed'
+        ],409);
     }
 }
