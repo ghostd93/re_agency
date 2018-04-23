@@ -22,5 +22,5 @@ Route::resources([
     'user' => 'UserController',
     'property' => 'PropertyController',
     'advertisement' => 'AdvertisementController',
-    'personaldata' => 'PersonalDataController'
+    'user.personaldata' => 'PersonalDataController'
 ]);

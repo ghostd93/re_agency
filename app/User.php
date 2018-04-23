@@ -2,36 +2,17 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    /**
-     * Get the personal data record associated with the user.
-     */
-    public function personalData()
-    {
-        return $this->hasOne('App\PersonalData');
-    }
-
-    /**
-     * Get the advertisement record associated with the user.
-     */
-    public function advertisement()
-    {
-        return $this->hasMany('App\Advertisement');
-    }
-
-    use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password'
     ];
 
     /**
@@ -49,6 +30,22 @@ class User extends Authenticatable
     }
 
     public function advertisements()
+    {
+        return $this->hasMany('App\Advertisement');
+    }
+
+    /**
+     * Get the personal data record associated with the user.
+     */
+    public function personalData()
+    {
+        return $this->hasOne(PersonalData::class, 'user_id');
+    }
+
+    /**
+     * Get the advertisement record associated with the user.
+     */
+    public function advertisement()
     {
         return $this->hasMany('App\Advertisement');
     }

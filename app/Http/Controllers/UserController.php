@@ -50,11 +50,14 @@ class UserController extends Controller
                 'message' => $validator->errors()
             ], 409);
         }
-        $user = new User($data);
-        $user->fill([
+        $user = new User([
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => bcrypt($data['password'])
         ]);
         $user->save();
+        $role = \App\Role::where('role_name', 'user')->first();
+        $user->roles()->attach($role);
         return response()->json([
            'message' => 'User successfully created'
         ], 200);
