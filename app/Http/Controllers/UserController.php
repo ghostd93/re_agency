@@ -60,7 +60,7 @@ class UserController extends Controller
         $user->roles()->attach($role);
         return response()->json([
            'message' => 'User successfully created'
-        ], 200);
+        ], 201);
     }
     /**
      * Display the specified resource.

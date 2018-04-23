@@ -18,9 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 });
  */
-Route::resources([
+Route::apiResources([
     'user' => 'UserController',
     'property' => 'PropertyController',
-    'advertisement' => 'AdvertisementController',
-    'user.personaldata' => 'PersonalDataController'
+    'advertisement' => 'AdvertisementController'
 ]);
+
+Route::put('user/{userId}/personaldata', 'PersonalDataController@update');
+Route::patch('user/{userId}/personaldata', 'PersonalDataController@update');
+Route::get('user/{userId}/personaldata', 'PersonalDataController@index');
+Route::delete('user/{userId}/personaldata', 'PersonalDataController@destroy');

@@ -48,7 +48,7 @@ class PersonalDataController extends Controller
 
         return response()->json([
             'message' => 'Personal data has been successfully attached to the user'
-        ], 200);
+        ], 201);
 
     }
 
@@ -59,9 +59,22 @@ class PersonalDataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $userId)
     {
-        //
+        $personalData = PersonalData::ofUser($userId);
+        $personalData->update([
+            "name" => $request->get('name'),
+            "surname" => $request->get('surname'),
+            "phone_number" => $request->get('phone_number'),
+            "country" => $request->get('country'),
+            "city" => $request->get('city'),
+            "street" => $request->get('street'),
+            "street_number" => $request->get('street_number'),
+            "postal_code" => $request->get('postal_code')]);
+
+        return response()->json([
+            'message' => 'Personal data has been successfully updated'
+        ], 201);
     }
 
     /**
@@ -70,8 +83,9 @@ class PersonalDataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($userId)
     {
-        //
+        $personalData = PersonalData::ofUser($userId);
+        $personalData->destroy();
     }
 }
