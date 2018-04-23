@@ -12,6 +12,8 @@ class Advertisement extends Model
         'date_of_announcement',
         'description',
         'price',
+        'user_id',
+        'property_id',
     ];
     /**
      * Get the user that owns the advertisement.
