@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Advertisement extends Model
 {
+    protected $fillable = [
+        'status',
+        'type',
+        'date_of_announcement',
+        'description',
+        'price',
+    ];
     /**
      * Get the user that owns the advertisement.
      */
