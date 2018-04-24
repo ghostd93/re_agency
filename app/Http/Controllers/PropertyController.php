@@ -58,17 +58,15 @@ class PropertyController extends Controller
             "street_number" => $request->get('street_number'),
             "postal_code" => $request->get('postal_code')]);
 
-        $validator = Validator::make($property,[
+        $validator = Validator::make($request->all(),[
             "property_type" => 'required',
             "description" => 'required',
             "date_of_registration" => 'required',
-            "property_area" => 'required',
-            "date_of_construction" => 'required',
-            "country" => $request->get('country'),
-            "city" => $request->get('city'),
-            "street" => $request->get('street'),
-            "street_number" => $request->get('street_number'),
-            "postal_code" => $request->get('postal_code')]
+            "country" => 'required',
+            "city" => 'required',
+            "street"=> 'required',
+            "street_number"=> 'required',
+            "postal_code" => 'required']
         );
 
         if($validator->fails()){
