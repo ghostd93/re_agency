@@ -80,9 +80,17 @@ class AdvertisementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $advertisementId)
     {
-        //
+        $advertisement = Property::ofAdvertisement($advertisementId);
+        $advertisement->update([
+            "type" => $request->get('type'),
+            "description" => $request->get('description'),
+            "price" => $request->get('price')]);
+
+        return response()->json([
+            'message' => 'Advertisement data has been successfully updated'
+        ], 201);
     }
 
     /**
