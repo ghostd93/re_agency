@@ -82,7 +82,7 @@ class AdvertisementController extends Controller
      */
     public function update(Request $request, $advertisementId)
     {
-        $advertisement = Property::ofAdvertisement($advertisementId);
+        $advertisement = Advertisement::find($advertisementId);
         $advertisement->update([
             "type" => $request->get('type'),
             "description" => $request->get('description'),

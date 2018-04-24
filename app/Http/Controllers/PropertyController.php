@@ -83,7 +83,7 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $advertisementId)
     {
-        $property = Property::ofAdvertisement($advertisementId);
+        $property = Advertisement::find($advertisementId)->property;
         $property->update([
             "property_type" => $request->get('property_type'),
             "description" => $request->get('description'),
