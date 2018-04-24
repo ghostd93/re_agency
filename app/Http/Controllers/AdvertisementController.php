@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Advertisement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AdvertisementController extends Controller
 {
@@ -21,16 +22,6 @@ class AdvertisementController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -39,17 +30,37 @@ class AdvertisementController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $advertisement = new Advertisement([
-            'status' => $data['status'],
-            'type' => $data['type'],
-            'date_of_announcement' => $data['date_of_announcement'],
-            'description' => $data['description'],
-            'price' => $data['price']]);
-        $advertisement->save();
 
-        return response()->json([
-            'message' => 'Advertisement successfully created'
-        ], 201);
+        $validator = Validator::make($data, [
+            'user_id' => 'required',
+            'property_id' => 'required',
+            'status' => 'required',
+            'type' => 'required',
+            'date_of_announcement' => 'required',
+            'description' => 'required',
+            'price' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 200);
+        } else {
+
+            $advertisement = new Advertisement([
+                'user_id' => $data['user_id'],
+                'property_id' => $data['property_id'],
+                'status' => $data['status'],
+                'type' => $data['type'],
+                'date_of_announcement' => $data['date_of_announcement'],
+                'description' => $data['description'],
+                'price' => $data['price']]);
+            $advertisement->save();
+
+            return response()->json([
+                'message' => 'Advertisement successfully created'
+            ], 201);
+        }
     }
 
     /**
@@ -63,17 +74,6 @@ class AdvertisementController extends Controller
         return response()->json([
             'data' => Advertisement::where('id', $id)->get()
         ], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

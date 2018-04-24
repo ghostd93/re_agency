@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Advertisement;
 use App\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
 {
@@ -36,7 +37,7 @@ class PropertyController extends Controller
      */
     public function store($advertisement_id, Request $request)
     {
-        $advertisement = Advertisement::find($advertisement_id);
+
         $property = new Property([
             "property_type" => $request->get('property_type'),
             "description" => $request->get('description'),
@@ -58,13 +59,31 @@ class PropertyController extends Controller
             "street_number" => $request->get('street_number'),
             "postal_code" => $request->get('postal_code')]);
 
-            $property->Advertisement()->save($advertisement);
-            $property->advertisement_id = $advertisement->id;
+        $validator = Validator::make($property,[
+            "property_type" => 'required',
+            "description" => 'required',
+            "date_of_registration" => 'required',
+            "property_area" => 'required',
+            "date_of_construction" => 'required',
+            "country" => $request->get('country'),
+            "city" => $request->get('city'),
+            "street" => $request->get('street'),
+            "street_number" => $request->get('street_number'),
+            "postal_code" => $request->get('postal_code')]
+        );
+
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 409);
+        } else {
+
             $property->save();
 
-        return response()->json([
-            'message' => 'Advertisement has been successfully attached to the property'
-        ], 201);
+            return response()->json([
+                'message' => 'Advertisement has been successfully attached to the property'
+            ], 201);
+        }
     }
 
     /**

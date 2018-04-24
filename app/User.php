@@ -29,17 +29,12 @@ class User extends Model
         return $this->belongsToMany('App\Role', 'role_user')->withTimestamps();
     }
 
-    public function advertisements()
-    {
-        return $this->hasMany('App\Advertisement');
-    }
-
     /**
      * Get the personal data record associated with the user.
      */
     public function personalData()
     {
-        return $this->hasOne(PersonalData::class, 'user_id');
+        return $this->hasOne(PersonalData::class);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\PersonalData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PersonalDataController extends Controller
 {
@@ -32,23 +33,42 @@ class PersonalDataController extends Controller
     public function store($userId, Request $request)
     {
         $user = User::find($userId);
-        $personalData = new PersonalData([
-            'user_id' => $user->id,
-            "name" => $request->get('name'),
-            "surname" => $request->get('surname'),
-            "phone_number" => $request->get('phone_number'),
-            "country" => $request->get('country'),
-            "city" => $request->get('city'),
-            "street" => $request->get('street'),
-            "street_number" => $request->get('street_number'),
-            "postal_code" => $request->get('postal_code')]);
-        $user->personalData()->save($personalData);
-        $user->personal_data_id = $personalData->id;
-        $user->save();
+        $data = $request->all();
 
-        return response()->json([
-            'message' => 'Personal data has been successfully attached to the user'
-        ], 201);
+        $validator = Validator::make($data, [
+            "name" => 'required',
+            "surname" => 'required',
+            "phone_number" => 'required',
+            "country" => 'required',
+            "city" => 'required',
+            "street" => 'required',
+            "street_number" => 'required',
+            "postal_code" => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 409);
+        } else {
+
+            $personalData = new PersonalData([
+                    'user_id' => $user->id,
+                    "name" => $data['name'],
+                    "surname" => $data['surname'],
+                    "phone_number" => $data['phone_number'],
+                    "country" => $data['country'],
+                    "city" => $data['city'],
+                    "street" => $data['street'],
+                    "street_number" => $data['street_number'],
+                    "postal_code" => $data['postal_code']]
+            );
+            $user->personalData()->save($personalData);
+
+            return response()->json([
+                'message' => 'Personal data has been successfully attached to the user'
+            ], 201);
+        }
 
     }
 

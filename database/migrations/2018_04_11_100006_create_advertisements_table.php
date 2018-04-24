@@ -18,7 +18,7 @@ class CreateAdvertisementsTable extends Migration
             $table->string("status");
             $table->string("type");
             $table->date("date_of_announcement");
-            $table->string("description");
+            $table->text("description");
             $table->integer("price");
             $table->timestamps();
         });
