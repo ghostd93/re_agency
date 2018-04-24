@@ -17,7 +17,7 @@ class PropertyController extends Controller
     public function index($advertisementId)
     {
         return response()->json([
-            'data' => Property::ofAdvertisement($advertisementId)->get()
+            'data' => Advertisement::find($advertisementId)->property
         ], 200);
     }
 
@@ -115,7 +115,7 @@ class PropertyController extends Controller
      */
     public function destroy($advertisementId)
     {
-        $property = Property::ofAdvertisement($advertisementId);
+        $property = Advertisement::find($advertisementId)->property;
         $property->destroy();
     }
 }
