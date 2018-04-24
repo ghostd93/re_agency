@@ -37,7 +37,7 @@ class PropertyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($advertisement_id, Request $request)
+    public function store($advertisementId, Request $request)
     {
 
         $property = new Property([
@@ -77,7 +77,10 @@ class PropertyController extends Controller
             ], 409);
         } else {
 
-            $property->save();
+            $advertisement = Advertisement::find($advertisementId);
+
+            $property->advertisement()->save($advertisement);
+            $advertisement->property()->associate($property)->save();
 
             return response()->json([
                 'message' => 'Property has been successfully attached to the advertisement'

@@ -53,7 +53,6 @@ class PersonalDataController extends Controller
         } else {
 
             $personalData = new PersonalData([
-                    'user_id' => $user->id,
                     "name" => $data['name'],
                     "surname" => $data['surname'],
                     "phone_number" => $data['phone_number'],
@@ -64,6 +63,7 @@ class PersonalDataController extends Controller
                     "postal_code" => $data['postal_code']]
             );
             $user->personalData()->save($personalData);
+            $personalData->user()->associate($user)->save();
 
             return response()->json([
                 'message' => 'Personal data has been successfully attached to the user'

@@ -48,11 +48,11 @@ class AdvertisementController extends Controller
 
             $advertisement = new Advertisement([
                 'user_id' => $data['user_id'],
-                'property_id' => $data['property_id'],
                 'type' => $data['type'],
                 'date_of_announcement' => $data['date_of_announcement'],
                 'description' => $data['description'],
                 'price' => $data['price']]);
+
             $advertisement->save();
 
             return response()->json([

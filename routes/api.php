@@ -28,3 +28,9 @@ Route::patch('user/{userId}/personaldata', 'PersonalDataController@update');
 Route::get('user/{userId}/personaldata', 'PersonalDataController@index');
 Route::delete('user/{userId}/personaldata', 'PersonalDataController@destroy');
 Route::post('user/{userId}/personaldata', 'PersonalDataController@store');
+
+Route::put('advertisement/{advertisementId}/property', 'PropertyController@update');
+Route::patch('advertisement/{advertisementId}/property', 'PropertyController@update');
+Route::get('advertisement/{advertisementId}/property', 'PropertyController@index');
+Route::delete('advertisement/{advertisementId}/property', 'PropertyController@destroy');
+Route::post('advertisement/{advertisementId}/property', 'PropertyController@store');
