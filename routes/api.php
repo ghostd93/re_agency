@@ -33,19 +33,28 @@ Route::group([
 
 });
 
-Route::apiResources([
-    'user' => 'UserController',
-    'advertisement' => 'AdvertisementController'
-]);
+Route::group([
 
-Route::put('user/{userId}/personaldata', 'PersonalDataController@update');
-Route::patch('user/{userId}/personaldata', 'PersonalDataController@update');
+    'middleware' => 'jwt.auth'
+
+], function(){
+
+    Route::apiResource('user', 'UserController');
+    Route::apiResource('advertisement', 'AdvertisementController', ['except' => ['index', 'show']]);
+
+    Route::put('user/{userId}/personaldata', 'PersonalDataController@update');
+    Route::patch('user/{userId}/personaldata', 'PersonalDataController@update');
+
+    Route::delete('user/{userId}/personaldata', 'PersonalDataController@destroy');
+    Route::post('user/{userId}/personaldata', 'PersonalDataController@store');
+
+    Route::put('advertisement/{advertisementId}/property', 'PropertyController@update');
+    Route::patch('advertisement/{advertisementId}/property', 'PropertyController@update');
+
+    Route::delete('advertisement/{advertisementId}/property', 'PropertyController@destroy');
+    Route::post('advertisement/{advertisementId}/property', 'PropertyController@store');
+});
+
 Route::get('user/{userId}/personaldata', 'PersonalDataController@index');
-Route::delete('user/{userId}/personaldata', 'PersonalDataController@destroy');
-Route::post('user/{userId}/personaldata', 'PersonalDataController@store');
-
-Route::put('advertisement/{advertisementId}/property', 'PropertyController@update');
-Route::patch('advertisement/{advertisementId}/property', 'PropertyController@update');
 Route::get('advertisement/{advertisementId}/property', 'PropertyController@index');
-Route::delete('advertisement/{advertisementId}/property', 'PropertyController@destroy');
-Route::post('advertisement/{advertisementId}/property', 'PropertyController@store');
+Route::apiResource('advertisement', 'AdvertisementController', ['only' => ['index', 'show']]);
