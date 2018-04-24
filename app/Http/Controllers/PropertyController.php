@@ -14,9 +14,11 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($advertisementId)
     {
-        //
+        return response()->json([
+            'data' => Property::ofAdvertisement($advertisementId)->get()
+        ], 200);
     }
 
     /**
@@ -44,15 +46,12 @@ class PropertyController extends Controller
             "date_of_registration" => $request->get('date_of_registration'),
             "property_area" => $request->get('property_area'),
             "date_of_construction" => $request->get('date_of_construction'),
-            "estete_status" => $request->get('estete_status'),
             "number_of_floors" => $request->get('number_of_floors'),
             "number_of_rooms" => $request->get('number_of_rooms'),
             "floor" => $request->get('floor'),
             "balcony" => $request->get('balcony'),
             "garage" => $request->get('garage'),
-            "destiny" => $request->get('destiny'),
             "land_area" => $request->get('land_area'),
-            "management" => $request->get('management'),
             "country" => $request->get('country'),
             "city" => $request->get('city'),
             "street" => $request->get('street'),
@@ -81,7 +80,7 @@ class PropertyController extends Controller
             $property->save();
 
             return response()->json([
-                'message' => 'Advertisement has been successfully attached to the property'
+                'message' => 'Property has been successfully attached to the advertisement'
             ], 201);
         }
     }
@@ -115,9 +114,33 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $advertisementId)
     {
-        //
+        $property = Property::ofAdvertisement($advertisementId);
+        $property->update([
+            "property_type" => $request->get('property_type'),
+            "description" => $request->get('description'),
+            "date_of_registration" => $request->get('date_of_registration'),
+            "property_area" => $request->get('property_area'),
+            "date_of_construction" => $request->get('date_of_construction'),
+            "estete_status" => $request->get('estete_status'),
+            "number_of_floors" => $request->get('number_of_floors'),
+            "number_of_rooms" => $request->get('number_of_rooms'),
+            "floor" => $request->get('floor'),
+            "balcony" => $request->get('balcony'),
+            "garage" => $request->get('garage'),
+            "destiny" => $request->get('destiny'),
+            "land_area" => $request->get('land_area'),
+            "management" => $request->get('management'),
+            "country" => $request->get('country'),
+            "city" => $request->get('city'),
+            "street" => $request->get('street'),
+            "street_number" => $request->get('street_number'),
+            "postal_code" => $request->get('postal_code')]);
+
+        return response()->json([
+            'message' => 'Property data has been successfully updated'
+        ], 201);
     }
 
     /**
@@ -126,8 +149,9 @@ class PropertyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($advertisementId)
     {
-        //
+        $property = Property::ofAdvertisement($advertisementId);
+        $property->destroy();
     }
 }

@@ -34,7 +34,6 @@ class AdvertisementController extends Controller
         $validator = Validator::make($data, [
             'user_id' => 'required',
             'property_id' => 'required',
-            'status' => 'required',
             'type' => 'required',
             'date_of_announcement' => 'required',
             'description' => 'required',
@@ -50,7 +49,6 @@ class AdvertisementController extends Controller
             $advertisement = new Advertisement([
                 'user_id' => $data['user_id'],
                 'property_id' => $data['property_id'],
-                'status' => $data['status'],
                 'type' => $data['type'],
                 'date_of_announcement' => $data['date_of_announcement'],
                 'description' => $data['description'],
