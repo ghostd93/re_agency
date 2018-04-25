@@ -11,24 +11,15 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //return User::all();
+        $request->user()->authorizeRoles('administrator');
         return response()->json([
             'data' => User::all()
         ], 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -73,17 +64,6 @@ class UserController extends Controller
         return response()->json([
             'data' => User::where('id', $id)->get()
         ], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
