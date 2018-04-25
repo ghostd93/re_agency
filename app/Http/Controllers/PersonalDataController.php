@@ -12,6 +12,7 @@ class PersonalDataController extends Controller
     /**
      * Display a listing of the resource.
      * @param int $userId
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index($userId, Request $request)
@@ -96,8 +97,8 @@ class PersonalDataController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param $userId
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $userId)
@@ -138,6 +139,6 @@ class PersonalDataController extends Controller
             abort('401', 'This action is unauthorized');
         }
 
-        $personalData->destroy();
+        $personalData->delete();
     }
 }

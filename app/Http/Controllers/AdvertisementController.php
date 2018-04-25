@@ -77,8 +77,8 @@ class AdvertisementController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param $advertisementId
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $advertisementId)

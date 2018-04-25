@@ -12,6 +12,7 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $advertisementId
      * @return \Illuminate\Http\Response
      */
     public function index($advertisementId)
@@ -24,7 +25,8 @@ class PropertyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param $advertisementId
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store($advertisementId, Request $request)
@@ -74,11 +76,12 @@ class PropertyController extends Controller
             ], 201);
         }
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param $advertisementId
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $advertisementId)
@@ -110,12 +113,12 @@ class PropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $advertisementId
+     * @return void
      */
     public function destroy($advertisementId)
     {
-        $property = Advertisement::find($advertisementId)->property;
-        $property->destroy();
+        $property = Advertisement::findOrFail($advertisementId)->property;
+        $property->delete();
     }
 }
