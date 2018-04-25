@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,24 +14,29 @@ class UserController extends Controller
      *
      * @param $request
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function index(Request $request)
     {
         $request->user()->authorizeRoles('administrator');
+
         return response()->json([
             'data' => User::all()
         ], 200);
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
         $request->user()->authorizeRoles('administrator');
+
 
         $data = $request->all();
         $validator = Validator::make($data, [
@@ -48,6 +54,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password'])
         ]);
+
         $user->save();
         $role = \App\Role::where('role_name', 'user')->first();
         $user->roles()->attach($role);
@@ -62,26 +69,34 @@ class UserController extends Controller
      * @param  int $id
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function show($id, Request $request)
     {
         $request->user()->authorizeRoles(['administrator', 'user']);
 
+
+        $user= User::find($id);
+
+
+        $request->user()->isOwner($user);
+
         return response()->json([
-            'data' => User::where('id', $id)->get()
+            'data' => $user
         ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     public function update(Request $request, $id)
     {
-
+        //
     }
 
     /**
@@ -90,13 +105,15 @@ class UserController extends Controller
      * @param  int $id
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
+     * @throws \Exception
      */
     public function destroy($id, Request $request)
     {
         $request->user()->authorizeRoles('administrator');
 
-        if(User::findOrFail($id)){
-            User::destroy($id);
+        if($user = User::findOrFail($id)){
+            $user->delete();
             return response()->json([
                 'message' => 'User successfully deleted'
             ], 200);

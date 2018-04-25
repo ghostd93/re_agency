@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -89,5 +90,20 @@ class User extends Authenticatable implements JWTSubject
         return (
             null !== $this->roles()->where('role_name', $role)->first()
         );
+    }
+
+    public function isOwner($model)
+    {
+
+        if($model->user_id){
+            if($this->id === $model->user_id || $this->hasRole('administrator')){
+                return true;
+            }
+            abort('401', 'This action is unauthorized');
+        } else if($this->id === $model->id || $this->hasRole('administrator')){
+            return true;
+        }
+        abort('401', 'This action is unauthorized');
+        return false;
     }
 }
