@@ -79,7 +79,9 @@ class UserController extends Controller
         $user= User::find($id);
 
 
-        $request->user()->isOwner($user);
+        if(!$request->user()->isOwner($user)){
+            abort('401', 'This action is unauthorized');
+        }
 
         return response()->json([
             'data' => $user

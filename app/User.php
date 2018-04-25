@@ -94,16 +94,16 @@ class User extends Authenticatable implements JWTSubject
 
     public function isOwner($model)
     {
-
-        if($model->user_id){
-            if($this->id === $model->user_id || $this->hasRole('administrator')){
+        if(is_object($model)) {
+            if ($model->user_id) {
+                if ($this->id === $model->user_id || $this->hasRole('administrator')) {
+                    return true;
+                }
+            } else if ($this->id === $model->id || $this->hasRole('administrator')) {
                 return true;
             }
-            abort('401', 'This action is unauthorized');
-        } else if($this->id === $model->id || $this->hasRole('administrator')){
-            return true;
+            return false;
         }
-        abort('401', 'This action is unauthorized');
         return false;
     }
 }

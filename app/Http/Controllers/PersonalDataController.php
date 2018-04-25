@@ -14,11 +14,17 @@ class PersonalDataController extends Controller
      * @param int $userId
      * @return \Illuminate\Http\Response
      */
-    public function index($userId)
+    public function index($userId, Request $request)
     {
-        //return PersonalData::ofUser($userId)->get();
+
+        $personalData = PersonalData::ofUser($userId)->get()->first();
+
+        if(!$request->user()->isOwner($personalData)){
+            abort('401', 'This action is unauthorized');
+        }
+
         return response()->json([
-            'data' => PersonalData::ofUser($userId)->get()
+            'data' => $personalData
         ], 200);
     }
 
@@ -33,6 +39,18 @@ class PersonalDataController extends Controller
     public function store($userId, Request $request)
     {
         $user = User::find($userId);
+
+        if(!$request->user()->isOwner($user)){
+            abort('401', 'This action is unauthorized');
+        }
+
+        if(PersonalData::ofUser($userId)->get()->first() != null){
+            return response()->json([
+                'message' => 'Personal data for this user already exists',
+                'data' => PersonalData::ofUser($userId)->get()->first()
+            ], 409);
+        }
+
         $data = $request->all();
 
         $validator = Validator::make($data, [
@@ -84,7 +102,12 @@ class PersonalDataController extends Controller
      */
     public function update(Request $request, $userId)
     {
-        $personalData = PersonalData::ofUser($userId);
+        $personalData = PersonalData::ofUser($userId)->get()->first();
+
+        if(!$request->user()->isOwner($personalData)){
+            abort('401', 'This action is unauthorized');
+        }
+
         $personalData->update([
             "name" => $request->get('name'),
             "surname" => $request->get('surname'),
@@ -103,12 +126,18 @@ class PersonalDataController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $userId
+     * @param Request $request
+     * @return void
      */
-    public function destroy($userId)
+    public function destroy($userId, Request $request)
     {
         $personalData = PersonalData::ofUser($userId);
+
+        if(!$request->user()->isOwner($personalData)){
+            abort('401', 'This action is unauthorized');
+        }
+
         $personalData->destroy();
     }
 }
