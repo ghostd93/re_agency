@@ -30,6 +30,7 @@ class AdvertisementController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['user_id'] = $request->user()->id;
 
         $validator = Validator::make($data, [
             'user_id' => 'required',

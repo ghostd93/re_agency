@@ -62,6 +62,9 @@ class PersonalDataController extends Controller
                     "street_number" => $data['street_number'],
                     "postal_code" => $data['postal_code']]
             );
+
+            $personalData->save();
+
             $user->personalData()->save($personalData);
             $personalData->user()->associate($user)->save();
 
