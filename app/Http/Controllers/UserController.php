@@ -30,6 +30,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->user()->authorizeRoles('administrator');
+
         $data = $request->all();
         $validator = Validator::make($data, [
             'name' => 'required|unique:users',
@@ -53,14 +55,18 @@ class UserController extends Controller
            'message' => 'User successfully created'
         ], 201);
     }
+
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
+        $request->user()->authorizeRoles(['administrator', 'user']);
+
         return response()->json([
             'data' => User::where('id', $id)->get()
         ], 200);
@@ -81,11 +87,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
+        $request->user()->authorizeRoles('administrator');
+
         if(User::findOrFail($id)){
             User::destroy($id);
             return response()->json([
