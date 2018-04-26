@@ -50,7 +50,7 @@ class PersonalData extends Model
         'postal_code'
     ];
 
-    protected $hidden = ['user_id'];
+    //protected $hidden = ['user_id'];
 
     /**
      * Get the user record associated with the personal data.

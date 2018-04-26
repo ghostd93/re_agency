@@ -20,6 +20,12 @@ class PersonalDataController extends Controller
 
         $personalData = PersonalData::ofUser($userId)->get()->first();
 
+        if($personalData == null){
+            return response()->json([
+                'message' => 'No personal data'
+            ], 404);
+        }
+
         if(!$request->user()->isOwner($personalData)){
             abort('401', 'This action is unauthorized');
         }
@@ -129,16 +135,26 @@ class PersonalDataController extends Controller
      *
      * @param $userId
      * @param Request $request
-     * @return void
+     * @return Illuminate\Http\Response
      */
     public function destroy($userId, Request $request)
     {
-        $personalData = PersonalData::ofUser($userId);
+        $personalData = PersonalData::ofUser($userId)->first();
+
+        if($personalData == null){
+            return response()->json([
+                'message' => 'Nothing to delete'
+            ], 409);
+        }
 
         if(!$request->user()->isOwner($personalData)){
             abort('401', 'This action is unauthorized');
         }
 
         $personalData->delete();
+
+        return response()->json([
+            'message' => 'Personal data has been successfully deleted'
+        ], 200);
     }
 }

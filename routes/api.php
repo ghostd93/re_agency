@@ -51,6 +51,7 @@ Route::group([
 
     Route::delete('user/{userId}/personaldata', 'PersonalDataController@destroy');
     Route::post('user/{userId}/personaldata', 'PersonalDataController@store');
+    Route::get('user/{userId}/personaldata', 'PersonalDataController@index');
 
     Route::put('advertisement/{advertisementId}/property', 'PropertyController@update');
     Route::patch('advertisement/{advertisementId}/property', 'PropertyController@update');
@@ -59,6 +60,6 @@ Route::group([
     Route::post('advertisement/{advertisementId}/property', 'PropertyController@store');
 });
 
-Route::get('user/{userId}/personaldata', 'PersonalDataController@index');
+
 Route::get('advertisement/{advertisementId}/property', 'PropertyController@index');
 Route::apiResource('advertisement', 'AdvertisementController', ['only' => ['index', 'show']]);

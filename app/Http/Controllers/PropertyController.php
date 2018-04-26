@@ -6,6 +6,8 @@ use App\Advertisement;
 use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Psy\Exception\FatalErrorException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class PropertyController extends Controller
 {
@@ -17,8 +19,15 @@ class PropertyController extends Controller
      */
     public function index($advertisementId)
     {
+        $property = Advertisement::findOrFail($advertisementId)->property;
+        if($property == null){
+            return response()->json([
+                'message' => 'No property'
+            ], 404);
+        }
+
         return response()->json([
-            'data' => Advertisement::find($advertisementId)->property
+            'data' => $property
         ], 200);
     }
 
@@ -35,6 +44,14 @@ class PropertyController extends Controller
         if(!$request->user()->isOwner($advertisement)){
             abort('401', 'This action is unauthorized');
         }
+
+        if($advertisement->property != null){
+            return response()->json([
+                'message' => 'Personal data for this user already exists',
+                'data' => $advertisement->property
+            ], 409);
+        }
+
         $property = new Property([
             "property_type" => $request->get('property_type'),
             "description" => $request->get('description'),
@@ -119,15 +136,25 @@ class PropertyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $advertisementId
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $advertisementId)
     {
         $advertisement = Advertisement::find($advertisementId);
-        if(!$request->user()->isOwner($advertisement)){
-            abort('401', 'This action is unauthorized');
+        if($advertisement != null) {
+            if(!$request->user()->isOwner($advertisement)){
+                abort('401', 'This action is unauthorized');
+            }
         }
         $property = Advertisement::findOrFail($advertisementId)->property;
-        $property->delete();
+        if($property != null) {
+            $property->delete();
+            return response()->json([
+                'message' => 'Property data has been successfully deleted'
+            ], 201);
+        }
+        return response()->json([
+            'message' => 'Nothing to delete'
+        ], 409);
     }
 }

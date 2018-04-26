@@ -71,8 +71,16 @@ class AdvertisementController extends Controller
      */
     public function show($id)
     {
+        $advertisement = Advertisement::where('id', $id)->get()->first();
+
+        if($advertisement == null){
+            return response()->json([
+                'message' => 'Advertisement does not exist'
+            ], 404);
+        }
+
         return response()->json([
-            'data' => Advertisement::where('id', $id)->get()
+            'data' => $advertisement
         ], 200);
     }
 
