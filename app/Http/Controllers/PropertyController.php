@@ -31,7 +31,10 @@ class PropertyController extends Controller
      */
     public function store($advertisementId, Request $request)
     {
-
+        $advertisement = Advertisement::find($advertisementId);
+        if(!$request->user()->isOwner($advertisement)){
+            abort('401', 'This action is unauthorized');
+        }
         $property = new Property([
             "property_type" => $request->get('property_type'),
             "description" => $request->get('description'),
@@ -49,7 +52,6 @@ class PropertyController extends Controller
             "street" => $request->get('street'),
             "street_number" => $request->get('street_number'),
             "postal_code" => $request->get('postal_code')]);
-
         $validator = Validator::make($request->all(),[
             "property_type" => 'required',
             "description" => 'required',
@@ -60,14 +62,13 @@ class PropertyController extends Controller
             "street_number"=> 'required',
             "postal_code" => 'required']
         );
-
         if($validator->fails()){
             return response()->json([
                 'message' => $validator->errors()
             ], 409);
         } else {
             $property->save();
-            $advertisement = Advertisement::find($advertisementId);
+
             $property->advertisement()->save($advertisement);
             $advertisement->property()->associate($property)->save();
 
@@ -86,6 +87,10 @@ class PropertyController extends Controller
      */
     public function update(Request $request, $advertisementId)
     {
+        $advertisement = Advertisement::find($advertisementId);
+        if(!$request->user()->isOwner($advertisement)){
+            abort('401', 'This action is unauthorized');
+        }
         $property = Advertisement::find($advertisementId)->property;
         $property->update([
             "property_type" => $request->get('property_type'),
@@ -116,8 +121,12 @@ class PropertyController extends Controller
      * @param $advertisementId
      * @return void
      */
-    public function destroy($advertisementId)
+    public function destroy(Request $request, $advertisementId)
     {
+        $advertisement = Advertisement::find($advertisementId);
+        if(!$request->user()->isOwner($advertisement)){
+            abort('401', 'This action is unauthorized');
+        }
         $property = Advertisement::findOrFail($advertisementId)->property;
         $property->delete();
     }

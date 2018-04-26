@@ -52,7 +52,9 @@ class AdvertisementController extends Controller
                 'date_of_announcement' => $data['date_of_announcement'],
                 'description' => $data['description'],
                 'price' => $data['price']]);
-
+            if(!$request->user()->isOwner($advertisement)){
+                abort('401', 'This action is unauthorized');
+            }
             $advertisement->save();
 
             return response()->json([
@@ -84,6 +86,9 @@ class AdvertisementController extends Controller
     public function update(Request $request, $advertisementId)
     {
         $advertisement = Advertisement::find($advertisementId);
+        if(!$request->user()->isOwner($advertisement)){
+            abort('401', 'This action is unauthorized');
+        }
         $advertisement->update([
             "type" => $request->get('type'),
             "description" => $request->get('description'),
@@ -100,16 +105,15 @@ class AdvertisementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$advertisementId)
     {
-        if(Advertisement::findOrFail($id)){
-            Advertisement::destroy($id);
+        $advertisement = Advertisement::findOrFail($advertisementId);
+        if(!$request->user()->isOwner($advertisement)){
+            abort('401', 'This action is unauthorized');
+        }
+        Advertisement::destroy($advertisementId);
             return response()->json([
                 'message' => 'Advertisement successfully deleted'
             ], 200);
-        }
-        return response()->json([
-            'message' => 'Advertisement deletion failed'
-        ],409);
     }
 }
