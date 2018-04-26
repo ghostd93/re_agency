@@ -120,4 +120,16 @@ return [
         ],
     ],
 
+//    "driver" => "smtp",
+//    "host" => "smtp.mailtrap.io",
+//    "port" => 2525,
+//    "from" => array(
+//        "address" => "test@test.com",
+//        "name" => "Test"
+//    ),
+//    "username" => "2f8b7213926a13",
+//    "password" => "b7bba000b9c1c1",
+//    "sendmail" => "/usr/sbin/sendmail -bs",
+//    "pretend" => false
+
 ];
