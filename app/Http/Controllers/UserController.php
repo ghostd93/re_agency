@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +13,6 @@ class UserController extends Controller
      *
      * @param $request
      * @return \Illuminate\Http\Response
-     * @throws AuthorizationException
      */
     public function index(Request $request)
     {
@@ -31,7 +29,6 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
-     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
@@ -69,12 +66,9 @@ class UserController extends Controller
      * @param  int $id
      * @param Request $request
      * @return \Illuminate\Http\Response
-     * @throws AuthorizationException
      */
     public function show($id, Request $request)
     {
-        $request->user()->authorizeRoles(['administrator', 'user']);
-
 
         $user= User::find($id);
 
@@ -93,8 +87,7 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
-     * @throws AuthorizationException
+     * @return void
      */
     public function update(Request $request, $id)
     {
@@ -107,7 +100,6 @@ class UserController extends Controller
      * @param  int $id
      * @param Request $request
      * @return \Illuminate\Http\Response
-     * @throws AuthorizationException
      * @throws \Exception
      */
     public function destroy($id, Request $request)

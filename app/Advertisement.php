@@ -4,6 +4,31 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Advertisement
+ *
+ * @property-read \App\Property $property
+ * @property-read \App\User $user
+ * @mixin \Eloquent
+ * @property int $id
+ * @property string $type
+ * @property string $date_of_announcement
+ * @property string $description
+ * @property int $price
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property int|null $user_id
+ * @property int|null $property_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereDateOfAnnouncement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Advertisement whereUserId($value)
+ */
 class Advertisement extends Model
 {
     protected $fillable = [
