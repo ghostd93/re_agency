@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ActivateAccount;
+use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -14,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -25,6 +31,19 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
+
+        $user = User::where('email', $credentials['email'])->first();
+
+        if($user != null) {
+            if (!$user->active) {
+                $token = JWTAuth::fromUser($user);
+                Mail::to($user)->send(new ActivateAccount($token));
+                return response()
+                    ->json([
+                        'error' => 'Your account is not active. The activation link was sent again'
+                    ], 401);
+            }
+        }
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -79,5 +98,46 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'name' => 'required|unique:users',
+            'email' => 'required|unique:users',
+            'password' => 'required'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 409);
+        }
+        $user = new User([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'active' => false
+        ]);
+
+        $user->save();
+        $role = \App\Role::where('role_name', 'user')->first();
+        $user->roles()->attach($role);
+
+        $token = JWTAuth::fromUser($user);
+//        return new ActivateAccount($token);
+        Mail::to($user)->send(new ActivateAccount($token));
+        return response()->json([
+            'message' => 'User successfully created'
+        ], 201);
+    }
+
+    public function activate()
+    {
+        $user = Auth::user();
+        $user->update(['active' => 1]);
+        return response()->json([
+            'message' => 'User successfully activated'
+        ], 201);
     }
 }

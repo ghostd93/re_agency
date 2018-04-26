@@ -26,10 +26,12 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('login', 'AuthController@login');
+    Route::post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::post('register','AuthController@register');
+    Route::get('activate','AuthController@activate');
 
 });
 
@@ -38,6 +40,8 @@ Route::group([
     'middleware' => 'jwt.auth'
 
 ], function(){
+
+
 
     Route::apiResource('user', 'UserController');
     Route::apiResource('advertisement', 'AdvertisementController', ['except' => ['index', 'show']]);
