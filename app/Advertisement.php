@@ -55,4 +55,9 @@ class Advertisement extends Model
     {
         return $this->belongsTo('App\Property');
     }
+
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
 }

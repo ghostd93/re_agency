@@ -45,6 +45,8 @@ Route::group([
 
     Route::apiResource('user', 'UserController');
     Route::apiResource('advertisement', 'AdvertisementController', ['except' => ['index', 'show']]);
+    Route::apiResource('advertisement/{advertisementId}/image', 'AdvertisementGalleryController', ['except' => ['index', 'show']]);
+
 
     Route::put('user/{userId}/personaldata', 'PersonalDataController@update');
     Route::patch('user/{userId}/personaldata', 'PersonalDataController@update');
@@ -63,3 +65,4 @@ Route::group([
 
 Route::get('advertisement/{advertisementId}/property', 'PropertyController@index');
 Route::apiResource('advertisement', 'AdvertisementController', ['only' => ['index', 'show']]);
+Route::apiResource('advertisement/{advertisementId}/image', 'AdvertisementGalleryController', ['only' => ['index', 'show']]);

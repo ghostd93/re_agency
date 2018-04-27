@@ -34,7 +34,6 @@ class UserController extends Controller
     {
         $request->user()->authorizeRoles('administrator');
 
-
         $data = $request->all();
         $validator = Validator::make($data, [
             'name' => 'required|unique:users',
