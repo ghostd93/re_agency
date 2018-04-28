@@ -62,10 +62,11 @@ class AdvertisementGalleryController extends Controller
         }
 
         $file_content = file_get_contents($request->file('image'));
-        $path = $advertisementId . '/' . $data['name'] . '.' . $request->file('image')->extension();
+        $file_name = str_random(16);
+        $path = $advertisementId . '/' .$file_name . '.' .$request->file('image')->extension();
 
         $photo = new Photo([
-            'name' => $data['name'],
+            'name' => $path,
             'url' => Storage::disk('public_uploads')->url($path),
             'thumb_url' => null
         ]);
