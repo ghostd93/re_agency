@@ -65,8 +65,8 @@ return [
         ],
         'public_uploads' => [
             'driver' => 'local',
-            'root'   => storage_path('app/public/uploads/images'),
-            'url' => 'http://localhost:8000/storage/uploads/images',
+            'root'   => public_path('/uploads/images'),
+            'url' => 'http://localhost:8000/uploads/images',
         ],
 
     ],

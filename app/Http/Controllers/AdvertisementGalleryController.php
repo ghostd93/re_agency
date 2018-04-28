@@ -7,6 +7,7 @@ use App\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 
 class AdvertisementGalleryController extends Controller
 {
@@ -64,15 +65,13 @@ class AdvertisementGalleryController extends Controller
         $file_content = file_get_contents($request->file('image'));
         $file_name = str_random(16) . '.' . $request->file('image')->extension();;
         $path = $advertisementId . '/' . $file_name;
+        $thumb_path = $advertisementId . '/thumbnails/' . 'thumb_' . $file_name;
 
         $photo = new Photo([
             'name' => $file_name,
             'url' => Storage::disk('public_uploads')->url($path),
-            'thumb_url' => null
+            'thumb_url' => Storage::disk('public_uploads')->url($thumb_path)
         ]);
-
-        $photo->advertisement()->associate($advertisement);
-        $photo->save();
 
         if(!Storage::disk('public_uploads')->put($path, $file_content)) {
             return response()->json([
@@ -80,9 +79,25 @@ class AdvertisementGalleryController extends Controller
             ], 409);
         }
 
+        if(!Storage::disk('public_uploads')->copy($path, $thumb_path)) {
+            return response()->json([
+                'message' => 'Something went wrong'
+            ], 409);
+        }
+
+        //$img = Image::make(Storage::disk('public_uploads')->url($thumb_path));
+
+        $image = Image::make(public_path('/uploads/images/' . $thumb_path));
+
+        $image->fit(200)->save();
+
+        $photo->advertisement()->associate($advertisement);
+        $photo->save();
+
         return response()->json([
             'message' => 'Image has been successfully saved',
-            'image_url' => Storage::disk('public_uploads')->url($path)
+            'image_url' => Storage::disk('public_uploads')->url($path),
+            'thumb_url' => Storage::disk('public_uploads')->url($thumb_path)
         ], 200);
     }
 
@@ -139,6 +154,7 @@ class AdvertisementGalleryController extends Controller
         $photo = Photo::findOrFail($id);
         if($photo != null) {
             Storage::disk('public_uploads')->delete($advertisementId . '/' . $photo->name);
+            Storage::disk('public_uploads')->delete($advertisementId . '/thumbnails/thumb_' . $photo->name);
             $photo->delete();
             return response()->json([
                 'message' => 'Photo has been successfully deleted'
