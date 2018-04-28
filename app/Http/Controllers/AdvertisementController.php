@@ -120,6 +120,7 @@ class AdvertisementController extends Controller
             abort('401', 'This action is unauthorized');
         }
         Advertisement::destroy($advertisementId);
+        Storage::disk('public_uploads')->delete($advertisementId);
             return response()->json([
                 'message' => 'Advertisement successfully deleted'
             ], 200);

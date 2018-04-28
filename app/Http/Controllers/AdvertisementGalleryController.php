@@ -62,11 +62,11 @@ class AdvertisementGalleryController extends Controller
         }
 
         $file_content = file_get_contents($request->file('image'));
-        $file_name = str_random(16);
-        $path = $advertisementId . '/' .$file_name . '.' .$request->file('image')->extension();
+        $file_name = str_random(16) . '.' . $request->file('image')->extension();;
+        $path = $advertisementId . '/' . $file_name;
 
         $photo = new Photo([
-            'name' => $path,
+            'name' => $file_name,
             'url' => Storage::disk('public_uploads')->url($path),
             'thumb_url' => null
         ]);
@@ -138,8 +138,8 @@ class AdvertisementGalleryController extends Controller
         }
         $photo = Photo::findOrFail($id);
         if($photo != null) {
-            //$photo->delete();
-            Storage::delete('uploads/images/'. $advertisementId . '/' . $photo->name . '.*');
+            Storage::disk('public_uploads')->delete($advertisementId . '/' . $photo->name);
+            $photo->delete();
             return response()->json([
                 'message' => 'Photo has been successfully deleted'
             ], 201);
