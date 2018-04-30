@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Advertisement
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Advertisement extends Model
 {
+    use Searchable;
+
     protected $fillable = [
         'status',
         'type',
@@ -59,5 +62,13 @@ class Advertisement extends Model
     public function photos()
     {
         return $this->hasMany(Photo::class);
+    }
+
+    public function toSearchableArray()
+    {
+
+        $array = $this->load('property')->toArray();
+
+        return $array;
     }
 }

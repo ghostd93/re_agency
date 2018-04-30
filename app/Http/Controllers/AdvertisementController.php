@@ -125,4 +125,16 @@ class AdvertisementController extends Controller
                 'message' => 'Advertisement successfully deleted'
             ], 200);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function search(Request $request)
+    {
+        $search_query = $request->get('search');
+        $advertisements  = Advertisement::search($search_query)->paginate(10);
+        $advertisements->load('property');
+        return $advertisements;
+    }
 }
