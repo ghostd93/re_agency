@@ -134,8 +134,8 @@ class AdvertisementController extends Controller
      */
     public function search(Request $request)
     {
-        $search_query = $request->get('search');
-        $advertisements  = Advertisement::search($search_query)->paginate(10);
+        $search_query = $request->get('query');
+        $advertisements = Advertisement::search($search_query)->paginate(10);
         $advertisements->load('property');
         return $advertisements;
     }
