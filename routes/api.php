@@ -66,4 +66,4 @@ Route::group([
 Route::get('advertisement/{advertisementId}/property', 'PropertyController@index');
 Route::apiResource('advertisement', 'AdvertisementController', ['only' => ['index', 'show']]);
 Route::apiResource('advertisement/{advertisementId}/image', 'AdvertisementGalleryController', ['only' => ['index', 'show']]);
-Route::post('search', 'AdvertisementController@search');
+Route::get('search', 'AdvertisementController@search');
