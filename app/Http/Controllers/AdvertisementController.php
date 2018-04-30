@@ -17,7 +17,7 @@ class AdvertisementController extends Controller
     {
         //return Advertisement::all();
         return response()->json([
-            'data' => Advertisement::all()
+            'data' => Advertisement::where('status',3)
         ], 200);
     }
 
@@ -51,7 +51,9 @@ class AdvertisementController extends Controller
                 'type' => $data['type'],
                 'date_of_announcement' => $data['date_of_announcement'],
                 'description' => $data['description'],
+                'status' => 0,
                 'price' => $data['price']]);
+
             if(!$request->user()->isOwner($advertisement)){
                 abort('401', 'This action is unauthorized');
             }
@@ -136,5 +138,13 @@ class AdvertisementController extends Controller
         $advertisements  = Advertisement::search($search_query)->paginate(10);
         $advertisements->load('property');
         return $advertisements;
+    }
+    public function verification($request)
+    {
+        $request->user()->authorizeRoles('administrator');
+
+        return response()->json([
+            'data' => Advertisement::where('status',1)
+        ], 200);
     }
 }

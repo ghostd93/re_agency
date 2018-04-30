@@ -94,11 +94,17 @@ class AdvertisementGalleryController extends Controller
         $photo->advertisement()->associate($advertisement);
         $photo->save();
 
+        if($advertisement->property != null) $advertisement->update([
+            "status" => 1]);
+        else @$advertisement->update([
+            "status" => 0]);
+
         return response()->json([
             'message' => 'Image has been successfully saved',
             'image_url' => Storage::disk('public_uploads')->url($path),
             'thumb_url' => Storage::disk('public_uploads')->url($thumb_path)
         ], 200);
+
     }
 
     /**

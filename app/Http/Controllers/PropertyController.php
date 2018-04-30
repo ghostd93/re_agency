@@ -89,6 +89,11 @@ class PropertyController extends Controller
             $property->advertisement()->save($advertisement);
             $advertisement->property()->associate($property)->save();
 
+            if (Photo::where("advertisement_id", $advertisement->id)->get()->first()!= null) $advertisement->update([
+                "status" => 1]);
+            else @$advertisement->update([
+                "status" => 0]);
+
             return response()->json([
                 'message' => 'Property has been successfully attached to the advertisement'
             ], 201);
