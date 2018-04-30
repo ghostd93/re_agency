@@ -17,7 +17,7 @@ class AdvertisementController extends Controller
     {
         //return Advertisement::all();
         return response()->json([
-            'data' => Advertisement::where('status',3)
+            'data' => Advertisement::where('status',3)->get()
         ], 200);
     }
 
@@ -73,7 +73,7 @@ class AdvertisementController extends Controller
      */
     public function show($id)
     {
-        $advertisement = Advertisement::where('id', $id)->get()->first();
+        $advertisement = Advertisement::where(['id' => $id, 'status' => 3])->get()->first();
 
         if($advertisement == null){
             return response()->json([
@@ -99,10 +99,23 @@ class AdvertisementController extends Controller
         if(!$request->user()->isOwner($advertisement)){
             abort('401', 'This action is unauthorized');
         }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|integer|between:2,3'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 200);
+        }
+
         $advertisement->update([
             "type" => $request->get('type'),
             "description" => $request->get('description'),
-            "price" => $request->get('price')]);
+            "price" => $request->get('price'),
+            "status" => $request->get('status')
+        ]);
 
         return response()->json([
             'message' => 'Advertisement data has been successfully updated'
@@ -135,7 +148,7 @@ class AdvertisementController extends Controller
     public function search(Request $request)
     {
         $search_query = $request->get('query');
-        $advertisements = Advertisement::search($search_query)->paginate(10);
+        $advertisements = Advertisement::search($search_query)->where('status', 3)->paginate(10);
         $advertisements->load('property');
         return $advertisements;
     }
