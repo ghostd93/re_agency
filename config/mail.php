@@ -120,6 +120,14 @@ return [
         ],
     ],
 
+    'stream' => [
+        'ssl' => [
+            'allow_self_signed' => true,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ],
+    ],
+
 //    "driver" => "smtp",
 //    "host" => "smtp.mailtrap.io",
 //    "port" => 2525,

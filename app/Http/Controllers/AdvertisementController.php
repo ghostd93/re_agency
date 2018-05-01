@@ -100,22 +100,7 @@ class AdvertisementController extends Controller
             abort('401', 'This action is unauthorized');
         }
 
-        $validator = Validator::make($request->all(), [
-            'status' => 'required|integer|between:2,3'
-        ]);
-
-        if($validator->fails()){
-            return response()->json([
-                'message' => $validator->errors()
-            ], 200);
-        }
-
-        $advertisement->update([
-            "type" => $request->get('type'),
-            "description" => $request->get('description'),
-            "price" => $request->get('price'),
-            "status" => $request->get('status')
-        ]);
+        $advertisement->update($request->except('status'));
 
         return response()->json([
             'message' => 'Advertisement data has been successfully updated'
@@ -152,12 +137,40 @@ class AdvertisementController extends Controller
         $advertisements->load('property');
         return $advertisements;
     }
-    public function verification($request)
+
+    public function verification(Request $request)
     {
         $request->user()->authorizeRoles('administrator');
 
         return response()->json([
             'data' => Advertisement::where('status',1)
         ], 200);
+    }
+
+    public function changeStatus(Request $request, $advertisementId)
+    {
+        $request->user()->authorizeRoles('administrator');
+
+        $advertisement = Advertisement::findOrFail($advertisementId);
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|integer|between:2,3'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'message' => $validator->errors()
+            ], 200);
+        }
+
+        if($advertisement->update($request->all())){
+            return response()->json([
+                'message' => 'Status has been successfully updated'
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Something went wrong'
+        ], 409);
     }
 }

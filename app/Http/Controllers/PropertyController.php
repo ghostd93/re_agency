@@ -114,23 +114,7 @@ class PropertyController extends Controller
             abort('401', 'This action is unauthorized');
         }
         $property = Advertisement::find($advertisementId)->property;
-        $property->update([
-            "property_type" => $request->get('property_type'),
-            "description" => $request->get('description'),
-            "date_of_registration" => $request->get('date_of_registration'),
-            "property_area" => $request->get('property_area'),
-            "date_of_construction" => $request->get('date_of_construction'),
-            "number_of_floors" => $request->get('number_of_floors'),
-            "number_of_rooms" => $request->get('number_of_rooms'),
-            "floor" => $request->get('floor'),
-            "balcony" => $request->get('balcony'),
-            "garage" => $request->get('garage'),
-            "land_area" => $request->get('land_area'),
-            "country" => $request->get('country'),
-            "city" => $request->get('city'),
-            "street" => $request->get('street'),
-            "street_number" => $request->get('street_number'),
-            "postal_code" => $request->get('postal_code')]);
+        $property->update($request->all());
 
         return response()->json([
             'message' => 'Property data has been successfully updated'

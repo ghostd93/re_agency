@@ -30,7 +30,7 @@ class ActivateAccount extends Mailable
      */
     public function build()
     {
-        $address = 'test@reagency.com';
+        $address = 'reagencyapi@gmail.com';
         $subject = 'Aktywacja konta';
         $name = 'Andrzej Duda';
 

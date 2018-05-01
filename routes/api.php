@@ -61,6 +61,7 @@ Route::group([
     Route::delete('advertisement/{advertisementId}/property', 'PropertyController@destroy');
     Route::post('advertisement/{advertisementId}/property', 'PropertyController@store');
     Route::get('advertisement','AdvertisementController@verification');
+    Route::post('advertisement/{advertisementId}/verificate','AdvertisementController@changeStatus');
 });
 
 

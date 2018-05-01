@@ -115,15 +115,7 @@ class PersonalDataController extends Controller
             abort('401', 'This action is unauthorized');
         }
 
-        $personalData->update([
-            "name" => $request->get('name'),
-            "surname" => $request->get('surname'),
-            "phone_number" => $request->get('phone_number'),
-            "country" => $request->get('country'),
-            "city" => $request->get('city'),
-            "street" => $request->get('street'),
-            "street_number" => $request->get('street_number'),
-            "postal_code" => $request->get('postal_code')]);
+        $personalData->update($request->all());
 
         return response()->json([
             'message' => 'Personal data has been successfully updated'
@@ -135,7 +127,7 @@ class PersonalDataController extends Controller
      *
      * @param $userId
      * @param Request $request
-     * @return Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function destroy($userId, Request $request)
     {
