@@ -15,9 +15,11 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        //return Advertisement::all();
+        $advertisements = Advertisement::where('status',3)
+            ->get()
+            ->load('property', 'photos', 'user');
         return response()->json([
-            'data' => Advertisement::where('status',3)->get()
+            'data' => $advertisements
         ], 200);
     }
 
@@ -73,7 +75,10 @@ class AdvertisementController extends Controller
      */
     public function show($id)
     {
-        $advertisement = Advertisement::where(['id' => $id, 'status' => 3])->get()->first();
+        $advertisement = Advertisement::where(['id' => $id, 'status' => 3])
+            ->get()
+            ->load('property', 'photos', 'user')
+            ->first();
 
         if($advertisement == null){
             return response()->json([
