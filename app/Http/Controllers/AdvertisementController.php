@@ -15,11 +15,10 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        $advertisements = Advertisement::where('status',3)->paginate(10)
-            ->load('property', 'photos', 'user');
-        return response()->json([
-            'data' => $advertisements
-        ], 200);
+        $advertisements = Advertisement::with('property', 'photos', 'user')
+            ->where('status',3)
+            ->paginate(10);
+        return $advertisements;
     }
 
     /**
