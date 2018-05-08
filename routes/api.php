@@ -42,7 +42,6 @@ Route::group([
 ], function(){
 
 
-
     Route::apiResource('user', 'UserController');
     Route::apiResource('advertisement', 'AdvertisementController', ['except' => ['index', 'show']]);
     Route::apiResource('advertisement/{advertisementId}/image', 'AdvertisementGalleryController', ['except' => ['index', 'show']]);
@@ -60,8 +59,9 @@ Route::group([
 
     Route::delete('advertisement/{advertisementId}/property', 'PropertyController@destroy');
     Route::post('advertisement/{advertisementId}/property', 'PropertyController@store');
-    Route::get('advertisement','AdvertisementController@verification');
-    Route::post('advertisement/{advertisementId}/verificate','AdvertisementController@changeStatus');
+
+    Route::get('admin/verification','AdvertisementController@verification');
+    Route::post('admin/{advertisementId}/verificate','AdvertisementController@changeStatus');
 });
 
 

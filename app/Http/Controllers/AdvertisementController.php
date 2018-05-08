@@ -147,7 +147,7 @@ class AdvertisementController extends Controller
         $request->user()->authorizeRoles('administrator');
 
         return response()->json([
-            'data' => Advertisement::where('status',1)
+            'data' => Advertisement::where('status',1)->get()
         ], 200);
     }
 
