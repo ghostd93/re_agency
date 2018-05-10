@@ -131,15 +131,28 @@ class AdvertisementController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return array
      */
     public function search(Request $request)
     {
         $search_query = $request->get('query');
-        $advertisements = Advertisement::search($search_query)->get();
-        $advertisements = $advertisements->where('status', 3);
+        $paginate = Advertisement::search($search_query)->paginate(10);
+        $advertisements = $paginate->where('status', 3);
         $advertisements->load('property');
-        return $advertisements;
+        $return = [
+            'current_page' => $paginate->currentPage(),
+            'data' => $advertisements,
+            'first_page_url' => $paginate->url(1),
+            'from' => $paginate->firstItem(),
+            'last_page' => $paginate->lastPage(),
+            'last_page_url' => $paginate->url($paginate->lastPage()),
+            'next_page_url' => $paginate->nextPageUrl(),
+            'per_page' => $paginate->perPage(),
+            'prev_page_url' => $paginate->previousPageUrl(),
+            'to' => $paginate->lastItem(),
+            'total' => $paginate->total()
+        ];
+        return $return;
     }
 
     public function verification(Request $request)
