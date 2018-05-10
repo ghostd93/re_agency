@@ -69,12 +69,4 @@ class Advertisement extends Model
     {
         return $this->hasMany(Photo::class);
     }
-
-    public function toSearchableArray()
-    {
-
-        $array = $this->load('property')->toArray();
-
-        return $array;
-    }
 }
