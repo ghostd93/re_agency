@@ -69,7 +69,7 @@ class UserController extends Controller
     public function show($id, Request $request)
     {
 
-        $user= User::find($id);
+        $user= User::find($id)->load('personalData');
 
 
         if(!$request->user()->isOwner($user)){
