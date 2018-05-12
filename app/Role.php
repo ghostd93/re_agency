@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
 
-    protected $hidden = ['pivot', 'create_at', 'updated_at'];
+    protected $hidden = ['pivot', 'created_at', 'updated_at'];
 
     public function users()
     {
