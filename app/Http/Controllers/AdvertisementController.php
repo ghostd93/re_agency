@@ -139,6 +139,7 @@ class AdvertisementController extends Controller
         $paginate = Advertisement::search($search_query)->paginate(10);
         $advertisements = $paginate->where('status', 3);
         $advertisements->load('property');
+        $advertisements->load('photos');
         $return = [
             'current_page' => $paginate->currentPage(),
             'data' => $advertisements,
