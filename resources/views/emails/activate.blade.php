@@ -3,7 +3,7 @@
     <p>Aby aktywować konto kliknij w poniższy link.</p>
 
     @component('mail::button', [
-        'url' => 'http://localhost:8000/api/auth/activate?token=' . $token,
+        'url' => env('APP_URL') . '/api/auth/activate?token=' . $token,
         'color' => 'blue'
     ])
         Aktywuj konto

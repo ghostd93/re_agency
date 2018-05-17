@@ -139,7 +139,8 @@ class AuthController extends Controller
 //        return new ActivateAccount($token);
         Mail::to($user)->send(new ActivateAccount($token));
         return response()->json([
-            'message' => 'User successfully created'
+            'message' => 'User successfully created',
+            'data' => $user
         ], 201);
     }
 
