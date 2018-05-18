@@ -60,7 +60,8 @@ class AdvertisementController extends Controller
             $advertisement->save();
 
             return response()->json([
-                'message' => 'Advertisement successfully created'
+                'message' => 'Advertisement successfully created',
+                'advertisement_id' => $advertisement->id
             ], 201);
         }
     }
@@ -133,10 +134,17 @@ class AdvertisementController extends Controller
      * @param Request $request
      * @return array
      */
+
+    private function escapePolishChars($string) {
+        $polish_characters = array('ę', 'Ę', 'o', 'Ó', 'ą', 'Ą', 'ś', 'Ś', 'ł', 'Ł', 'ż', 'Ż', 'ź', 'Ź', 'ć', 'Ć', 'ń', 'Ń');
+        return str_replace($polish_characters, '%', $string);
+    }
+
     public function search(Request $request)
     {
-        $search_query = urldecode($request->get('query'));
-        $paginate = Advertisement::search($search_query)->paginate(10);
+        $search_query = $request->get('query');
+
+        $paginate = Advertisement::search('%')->paginate(10);
         $advertisements = $paginate->where('status', 3);
         $advertisements->load('property');
         $advertisements->load('photos');
