@@ -41,7 +41,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the advertisement record associated with the user.
      */
-    public function advertisement()
+    public function advertisements()
     {
         return $this->hasMany('App\Advertisement');
     }
