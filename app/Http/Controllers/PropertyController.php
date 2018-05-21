@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Advertisement;
+use App\Photo;
 use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
