@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Advertisement;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -115,5 +116,15 @@ class UserController extends Controller
             'message' => 'User deletion failed'
         ],409);
 
+    }
+
+    public function myAdverts($id, Request $request)
+    {
+        $advertisements = Advertisement::where('user_id', $id)->get();
+
+
+        return response()->json([
+            'data' => $advertisements
+        ], 200);
     }
 }
