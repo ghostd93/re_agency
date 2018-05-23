@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Advertisement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AdvertisementController extends Controller
