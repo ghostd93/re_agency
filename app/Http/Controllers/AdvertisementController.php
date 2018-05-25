@@ -105,7 +105,7 @@ class AdvertisementController extends Controller
             abort('401', 'This action is unauthorized');
         }
 
-        $advertisement->update($request->except('status'));
+        $advertisement->update($request->all());
 
         return response()->json([
             'message' => 'Advertisement data has been successfully updated',
