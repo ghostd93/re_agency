@@ -170,7 +170,7 @@ class AdvertisementController extends Controller
         $request->user()->authorizeRoles('administrator');
 
         return response()->json([
-            'data' => Advertisement::where('status',1)->paginate(10)
+            'data' => Advertisement::where('status',1)->load('property', 'user')->paginate(10)
         ], 200);
     }
 
