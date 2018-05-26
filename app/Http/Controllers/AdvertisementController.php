@@ -113,7 +113,8 @@ class AdvertisementController extends Controller
         $advertisement->update($request->except('status'));
 
         return response()->json([
-            'message' => 'Advertisement data has been successfully updated'
+            'message' => 'Advertisement data has been successfully updated',
+            'data' => $advertisement
         ], 201);
     }
 
@@ -175,7 +176,9 @@ class AdvertisementController extends Controller
         $request->user()->authorizeRoles('administrator');
 
         return response()->json([
-            'data' => Advertisement::where('status',1)->get()
+            'data' => Advertisement::with('property', 'photos', 'user')
+                ->where('status',1)
+                ->paginate(10)
         ], 200);
     }
 
