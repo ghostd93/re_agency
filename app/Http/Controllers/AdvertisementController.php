@@ -76,7 +76,7 @@ class AdvertisementController extends Controller
     public function show(Request $request, $id)
     {
         $advertisement = Advertisement::find($id);
-        if(!$request->user()->isOwner($advertisement)){
+        if($request->user() != null && !$request->user()->isOwner($advertisement)){
             $advertisement = Advertisement::where(['id' => $id, 'status' => 3])
                 ->get()
                 ->load('property', 'photos', 'user')
