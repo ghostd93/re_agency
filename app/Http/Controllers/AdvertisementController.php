@@ -73,12 +73,17 @@ class AdvertisementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $advertisement = Advertisement::where(['id' => $id, 'status' => 3])
-            ->get()
-            ->load('property', 'photos', 'user')
-            ->first();
+
+        if(!$request->user()->isOwner(Advertisement::find($id))){
+            $advertisement = Advertisement::where(['id' => $id, 'status' => 3])
+                ->get()
+                ->load('property', 'photos', 'user')
+                ->first();
+        } else {
+            $advertisement = Advertisement::find($id);
+        }
 
         if($advertisement == null){
             return response()->json([

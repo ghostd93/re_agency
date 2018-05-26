@@ -46,8 +46,7 @@ class Advertisement extends Model
 
     protected $hidden = [
         'property_id',
-        'user_id',
-        'admin_notes'
+        'user_id'
     ];
     /**
      * Get the user that owns the advertisement.
