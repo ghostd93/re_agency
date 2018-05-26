@@ -111,15 +111,30 @@ class PersonalDataController extends Controller
     {
         $personalData = PersonalData::ofUser($userId)->get()->first();
 
-        if(!$request->user()->isOwner($personalData)){
-            abort('401', 'This action is unauthorized');
+        if($personalData != null) {
+
+            if (!$request->user()->isOwner($personalData)) {
+                abort('401', 'This action is unauthorized');
+            }
+
+            $personalData->update($request->all());
+
+            return response()->json([
+                'message' => 'Personal data has been successfully updated'
+            ], 201);
+
+        } else {
+
+            $personalData->save($request->all());
+
+            $request->user()->personalData()->save($personalData);
+            $personalData->user()->associate($request->user())->save();
+
+            return response()->json([
+                'message' => 'Personal data has been successfully updated'
+            ], 201);
+            
         }
-
-        $personalData->update($request->all());
-
-        return response()->json([
-            'message' => 'Personal data has been successfully updated'
-        ], 201);
     }
 
     /**
