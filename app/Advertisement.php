@@ -42,6 +42,7 @@ class Advertisement extends Model
         'price',
         'user_id',
         'property_id',
+        'admin_notes'
     ];
 
     protected $hidden = [
