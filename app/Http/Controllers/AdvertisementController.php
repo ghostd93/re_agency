@@ -111,6 +111,7 @@ class AdvertisementController extends Controller
         }
 
         $advertisement->update($request->except('status'));
+        $advertisement->update(['status' => 1]);
 
         return response()->json([
             'message' => 'Advertisement data has been successfully updated',
