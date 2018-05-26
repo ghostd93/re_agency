@@ -92,7 +92,7 @@ class PropertyController extends Controller
 
             if (Photo::where("advertisement_id", $advertisement->id)->get()->first()!= null) $advertisement->update([
                 "status" => 1]);
-            else @$advertisement->update([
+            else $advertisement->update([
                 "status" => 0]);
 
             return response()->json([
@@ -116,6 +116,11 @@ class PropertyController extends Controller
         }
         $property = Advertisement::find($advertisementId)->property;
         $property->update($request->all());
+
+        if (Photo::where("advertisement_id", $advertisement->id)->get()->first()!= null) $advertisement->update([
+            "status" => 1]);
+        else $advertisement->update([
+            "status" => 0]);
 
         return response()->json([
             'message' => 'Property data has been successfully updated'
