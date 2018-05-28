@@ -48,7 +48,7 @@ class PropertyController extends Controller
 
         if($advertisement->property != null){
             return response()->json([
-                'message' => 'Personal data for this user already exists',
+                'message' => 'Property for this advertisement already exists',
                 'data' => $advertisement->property
             ], 409);
         }
