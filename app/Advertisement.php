@@ -41,12 +41,10 @@ class Advertisement extends Model
         'description',
         'price',
         'user_id',
-        'property_id',
         'admin_notes'
     ];
 
     protected $hidden = [
-        'property_id',
         'user_id'
     ];
     /**
