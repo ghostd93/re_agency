@@ -86,6 +86,7 @@ class PropertyController extends Controller
                 'message' => $validator->errors()
             ], 409);
         } else {
+            dd($property->advertisement_id);
             $property->save();
 
             $property->advertisement()->save($advertisement);
