@@ -152,7 +152,7 @@ class AdvertisementController extends Controller
     {
         $search_query = $request->get('query');
 
-        $paginate = Advertisement::search('$search_query')->paginate(10);
+        $paginate = Advertisement::search($search_query)->paginate(10);
         $advertisements = $paginate->where('status', 3);
         $advertisements->load('property');
         $advertisements->load('photos');
