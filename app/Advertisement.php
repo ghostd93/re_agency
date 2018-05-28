@@ -67,4 +67,15 @@ class Advertisement extends Model
     {
         return $this->hasMany(Photo::class);
     }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->with("property")->with("user")->where("id", $this->id)->first()->toArray();
+        return $array;
+    }
 }
