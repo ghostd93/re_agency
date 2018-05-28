@@ -85,6 +85,7 @@ class PropertyController extends Controller
                 'message' => $validator->errors()
             ], 409);
         } else {
+            $advertisement->property->advertisement_id = $advertisementId;
             $property->save();
 
             $property->advertisement()->save($advertisement);
