@@ -69,7 +69,7 @@ class PropertyController extends Controller
             "city" => $request->get('city'),
             "street" => $request->get('street'),
             "street_number" => $request->get('street_number'),
-            ['advertisement_id'] = $advertisementId,
+            'advertisement_id' => $advertisementId,
             "postal_code" => $request->get('postal_code')]);
         $validator = Validator::make($request->all(),[
             "property_type" => 'required',
