@@ -69,6 +69,7 @@ class PropertyController extends Controller
             "city" => $request->get('city'),
             "street" => $request->get('street'),
             "street_number" => $request->get('street_number'),
+            ['advertisement_id'] = $advertisementId,
             "postal_code" => $request->get('postal_code')]);
         $validator = Validator::make($request->all(),[
             "property_type" => 'required',
@@ -85,7 +86,6 @@ class PropertyController extends Controller
                 'message' => $validator->errors()
             ], 409);
         } else {
-            $property['advertisement_id'] = $advertisementId;
             $property->save();
 
             $property->advertisement()->save($advertisement);
