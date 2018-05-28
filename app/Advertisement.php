@@ -62,7 +62,7 @@ class Advertisement extends Model
      */
     public function property()
     {
-        return $this->belongsTo('App\Property');
+        return $this->hasOne('App\Property');
     }
 
     public function photos()

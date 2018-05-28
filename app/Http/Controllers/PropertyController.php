@@ -7,8 +7,6 @@ use App\Photo;
 use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Psy\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class PropertyController extends Controller
 {
@@ -86,10 +84,9 @@ class PropertyController extends Controller
                 'message' => $validator->errors()
             ], 409);
         } else {
-            $property->save();
 
-            $property->advertisement()->save($advertisement);
-            $advertisement->property()->associate($property)->save();
+            $property->advertisement()->associate($advertisement);
+            $property->save();
 
             if (Photo::where("advertisement_id", $advertisement->id)->get()->first()!= null) $advertisement->update([
                 "status" => 1]);

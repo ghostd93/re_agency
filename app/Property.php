@@ -73,7 +73,7 @@ class Property extends Model
      */
     public function advertisement()
     {
-        return $this->hasOne('App\Advertisement');
+        return $this->belongsTo('App\Advertisement');
     }
 
 }

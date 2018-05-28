@@ -125,6 +125,7 @@ class PersonalDataController extends Controller
 
         } else {
 
+
             $personalData->save($request->all());
 
             $request->user()->personalData()->save($personalData);
@@ -133,7 +134,7 @@ class PersonalDataController extends Controller
             return response()->json([
                 'message' => 'Personal data has been successfully updated'
             ], 201);
-            
+
         }
     }
 
